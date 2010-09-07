@@ -37,7 +37,7 @@ task :default => [:run]
    'test_exit_status_passed'  => "PASSED",
    'test_exit_status_failed'  => "FAILED",
    'test_exit_status_skipped' => "SKIPPED",
-   'xml_report_class_name'    => "com.tests",
+   'xml_report_class_name'    => "qa.tests",
    'xml_report_file_name'     => "TESTS-TestSuites.xml",
    'reports_dir'              => @reports_dir
 }
