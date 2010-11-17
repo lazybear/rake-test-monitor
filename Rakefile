@@ -334,6 +334,7 @@ class Test
 
     def run
        @cmd = @cmd + " " + @execute_args unless @execute_args == ""
+       ENV["REPORT_FILE"] = File.join(@test_data['reports_dir'], @execute_class)
        tStart = Time.now
        print("-- #{tStart.strftime('[%H:%M:%S]')} running: [#{@cmd}] ")
        begin
