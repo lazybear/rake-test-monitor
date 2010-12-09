@@ -33,7 +33,7 @@ task :default => [:run]
 # -- the following vars control the behavior of running tests
 @test_data = {
    'output_on'                => false,
-   'test_retry'               => false,
+   'test_retry'               => true,
    'test_exit_status_passed'  => "PASSED",
    'test_exit_status_failed'  => "FAILED",
    'test_exit_status_skipped' => "SKIPPED",
@@ -90,6 +90,10 @@ def filter_by_keywords
             }
          }
       }
+
+      # -- in case only a negative keyword was given, let's fill up tmp_tests array here (ie: if it is empty now):
+      tmp_tests = @tests.uniq if tmp_tests.length < 1
+
       # -- check for a negative keyword
       if /!/.match(ENV['KEYWORDS'])
          ENV['KEYWORDS'].gsub(/,/, ' ').split.each { |keyword|
@@ -143,7 +147,7 @@ end
 desc "-- print tests..."
 task :print_human do
    Rake::Task["find_all"].invoke
-   each { |t| 
+   each { |t|
       begin
          puts t.to_s
       rescue => e
@@ -162,7 +166,7 @@ task :run do
    Rake::Task["find_all"].invoke
    tStart = Time.now
    # -- let's run each test now
-   each { |t| 
+   each { |t|
       begin
          t.validate
          # -- do we run test more than once if it failed first time ?
@@ -352,7 +356,7 @@ class Test
        ensure
           puts @exit_status
           puts @output if @test_data['output_on']
-       end   
+       end
        tFinish = Time.now
        @execution_time = tFinish - tStart
     end
