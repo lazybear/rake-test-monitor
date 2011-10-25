@@ -58,8 +58,9 @@ task :help do
     puts "   # @executeArgs"
     puts "   # @keywords acceptance"
     puts "   # @description some interesting test\n\n"
-    puts "   Note:\n\n   Your test must end with 'test.rb' - otherwise Rake won't be able to find it, eg:\n\n"
-    puts "   tests/some_new_test.rb\n\n\n"
+    puts "   Note 1:\n\n   Your test must end with 'test.rb' - otherwise Rake won't be able to find it, eg:\n"
+    puts "   tests/some_new_test.rb\n\n"
+    puts "   Note 2:\n\n   Your test must define at least one keyword.\n\n"
 end
 
 # -- prepare reports_dir
@@ -92,7 +93,7 @@ def filter_by_keywords
       }
 
       # -- in case only a negative keyword was given, let's fill up tmp_tests array here (ie: if it is empty now):
-      tmp_tests = @tests.uniq if tmp_tests.length < 1
+      tmp_tests = @tests.uniq if tmp_tests.length < 1 and /!/.match(ENV['KEYWORDS'])
 
       # -- check for a negative keyword
       if /!/.match(ENV['KEYWORDS'])
@@ -351,7 +352,7 @@ class Test
              end
           }
        rescue Timeout::Error => e
-          @output = "[ TERMINATED WITH TIMEOUT (#{@timeout.to_s}) ]"
+          @output << "\n\n[ TERMINATED WITH TIMEOUT (#{@timeout.to_s}) ]"
           @exit_status = @test_data['test_exit_status_failed']
        ensure
           puts @exit_status
